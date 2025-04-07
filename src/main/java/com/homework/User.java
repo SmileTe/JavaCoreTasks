@@ -1,15 +1,15 @@
 package com.homework;
 
 public class User {
-    String name;
-    String phoneNumber;
+    private String name;
+    private int phoneNumber;
 
     public User() {
     }
 
-    public User(String name, String phoneNumber) {
-        this.name = name;
-        this.phoneNumber = phoneNumber;
+    public User(String name, int phoneNumber) {
+        setName(name);
+        setPhoneNumber(phoneNumber);
     }
 
     public String getName() {
@@ -20,11 +20,11 @@ public class User {
         this.name = name;
     }
 
-    public String getPhoneNumber() {
+    public int getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(int phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

@@ -1,11 +1,13 @@
 package com.homework;
 
-public class Book extends Publication implements Printable {
-    private String ISBN;
+import java.util.Objects;
 
-    public Book(String title, String author, int year, String ISBN) {
+public class Book extends Publication implements Printable {
+    private String isbn;
+
+    public Book(String title, String author, int year, String isbn) {
         super(title, author, year);
-        setISBN(ISBN);
+        setIsbn(isbn);
     }
 
     @Override
@@ -15,27 +17,30 @@ public class Book extends Publication implements Printable {
 
     @Override
     public String toString() {
-        return super.toString() + " ISBN: " + getISBN();
+        return super.toString() + " ISBN: " + getIsbn();
     }
 
     @Override
-    public boolean equals(Object obj) {
-        Book book = (Book) obj;
-        return super.equals(obj)
-                && (ISBN != null ? book.equals(book.ISBN) : book.ISBN == null);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Book book = (Book) o;
+        return Objects.equals(isbn, book.isbn);
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode() + (ISBN != null ? ISBN.hashCode() : 0);
+        return Objects.hash(super.hashCode(), isbn);
     }
 
-    public String getISBN() {
-        return ISBN;
+
+    public String getIsbn() {
+        return isbn;
     }
 
-    public void setISBN(String ISBN) {
-        this.ISBN = ISBN;
+    public void setIsbn(String ISBN) {
+        this.isbn = ISBN;
     }
 
     @Override

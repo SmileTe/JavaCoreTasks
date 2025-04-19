@@ -1,5 +1,7 @@
 package com.homework;
 
+import java.util.Objects;
+
 public class Magazine extends Publication implements Printable {
     private int issueNumber;
 
@@ -19,15 +21,17 @@ public class Magazine extends Publication implements Printable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        Magazine magazine = (Magazine) obj;
-        return super.equals(obj)
-                && issueNumber == magazine.issueNumber;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Magazine magazine = (Magazine) o;
+        return issueNumber == magazine.issueNumber;
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode() + issueNumber;
+        return Objects.hash(super.hashCode(), issueNumber);
     }
 
     public int getIssueNumber() {

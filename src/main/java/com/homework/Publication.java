@@ -1,10 +1,11 @@
 package com.homework;
 
+import java.util.Objects;
+
 public abstract class Publication {
     private String title;
     private String author;
     private int year;
-    private static int publicationCount = 0;
 
     public Publication(String title, String author, int year) {
         setTitle(title);
@@ -14,14 +15,6 @@ public abstract class Publication {
 
     public abstract String getType();
 
-    public static int getPublicationCount() {
-        return publicationCount;
-    }
-
-    public static void setPublicationCount(int t) {
-        publicationCount = publicationCount + t;
-        ;
-    }
 
     @Override
     public String toString() {
@@ -31,24 +24,18 @@ public abstract class Publication {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        //– сравнение публикаций по полям.
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        Publication publication = (Publication) obj;
-        return (title != null ? title.equals(publication.title) : publication.title == null)
-                && (author != null ? publication.equals(publication.title) : publication.title == null)
-                && year == publication.year;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Publication that = (Publication) o;
+        return year == that.year && Objects.equals(title, that.title) && Objects.equals(author, that.author);
     }
 
     @Override
     public int hashCode() {
-        //вычисление хэш-кода на основе полей.
-        int result = (title != null ? title.hashCode() : 0);
-        result = result + (author != null ? author.hashCode() : 0);
-        result = result + year;
-        return result;
+        return Objects.hash(title, author, year);
     }
+
 
     public String getTitle() {
         return title;

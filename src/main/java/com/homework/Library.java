@@ -3,10 +3,13 @@ package com.homework;
 import java.util.*;
 
 public class Library {
-    List<Book> catalog;
+    private final List<Book> catalog;
+
+    public Library() {
+        catalog = new ArrayList<>();
+    }
 
     public void start() {
-        catalog = new ArrayList<>();
 
         try (Scanner scanner = new Scanner(System.in)) {
             String menu = "Введите число 1–5:\n" +
@@ -64,9 +67,6 @@ public class Library {
                             System.out.println(e.getMessage());
                         }
                         break;
-                    case 5:
-                        //Выйти из приложения
-                        break;
                     default:
                         break;
                 }
@@ -84,8 +84,7 @@ public class Library {
         String author = scanner.nextLine();
 
         System.out.print("Введите количество экземпляров: ");
-        int copies = 0;
-        copies = scanner.nextInt();
+        int copies = scanner.nextInt();
         scanner.nextLine();
         addBook(title, author, copies);
 

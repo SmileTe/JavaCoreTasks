@@ -155,7 +155,6 @@ public class Shop {
                                 Product::getCategory,
                                 Collectors.maxBy(Comparator.comparing(Product::getPrice))));
 
-        int t = 1;
     }
 
 

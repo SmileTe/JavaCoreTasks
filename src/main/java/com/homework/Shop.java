@@ -19,6 +19,12 @@ public class Shop {
                 .flatMap(order -> order.getProducts().stream().filter(x -> x.getCategory().equals("Books") && x.priceMoreThanValue(100)))
                 .distinct()
                 .toList();
+        System.out.println("Задание 1");
+        for (Product product :
+                listProductsBooks) {
+            System.out.println(product);
+        }
+
 
 //        Залание 2.
 //        Получите список заказов с продуктами из категории "Children's products".
@@ -27,6 +33,13 @@ public class Shop {
                 .filter(order -> order.getProducts().stream().anyMatch(x -> x.getCategory().equals("Children's products")))
                 .distinct()
                 .toList();
+        System.out.println("--------------------------");
+        System.out.println("Задание 2");
+        for (Order order :
+                orderListChildrensProducts) {
+            System.out.println(order);
+        }
+
 
 //        Задание 3.
 //        Получите список продуктов из категории "Toys" и примените скидку 10% и получите сумму всех
@@ -36,6 +49,10 @@ public class Shop {
                 .flatMap(order -> order.getProducts().stream().filter(x -> x.getCategory().equals("Toys")))
                 .map(x -> x.getPriceWithDiscount(10))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+        System.out.println("--------------------------");
+        System.out.println("Задание 3");
+        System.out.println(productListToysWithDiscount);
+
 
 //        Задание 4.
 //        Получите список продуктов, заказанных клиентом второго уровня между 01-фев-2021 и 01-апр-2021.
@@ -47,6 +64,12 @@ public class Shop {
                 .flatMap(order -> order.getProducts().stream())
                 .distinct()
                 .toList();
+        System.out.println("--------------------------");
+        System.out.println("Задание 4");
+        for (Product product :
+                productsListBetweenDates) {
+            System.out.println(product);
+        }
 
 //        Задание 5.
 //        Получите топ 2 самые дешевые продукты из категории "Books".
@@ -57,6 +80,12 @@ public class Shop {
                 .sorted(Comparator.comparing(Product::getPrice))
                 .limit(2)
                 .toList();
+        System.out.println("--------------------------");
+        System.out.println("Задание 5");
+        for (Product product :
+                productsListCheapBooks) {
+            System.out.println(product);
+        }
 
 //        Задание 6.
 //        Получите 3 самых последних сделанных заказа.
@@ -67,6 +96,12 @@ public class Shop {
                 .sorted(Comparator.comparing(Order::getDeliveryDate).reversed())
                 .limit(3)
                 .toList();
+        System.out.println("--------------------------");
+        System.out.println("Задание 6");
+        for (Order order :
+                lastOrdersList) {
+            System.out.println(order);
+        }
 
 //        Задание 7.
 //        Получите список заказов, сделанных 15-марта-2021, выведите id заказов в консоль и затем верните
@@ -78,6 +113,12 @@ public class Shop {
                 .flatMap(order -> order.getProducts().stream())
                 .distinct()
                 .toList();
+        System.out.println("--------------------------");
+        System.out.println("Задание 7");
+        for (Product product :
+                productsOnDate) {
+            System.out.println(product);
+        }
 
 //        Задание 8.
 //        Рассчитайте общую сумму всех заказов, сделанных в феврале 2021.
@@ -88,6 +129,9 @@ public class Shop {
                 .flatMap(x -> x.getProducts().stream())
                 .map(Product::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+        System.out.println("--------------------------");
+        System.out.println("Задание 8");
+        System.out.println(totalSumPerMonth);
 
 
 //        Задание 9.
@@ -99,7 +143,9 @@ public class Shop {
                 .map(Order::getSummaAsBigDecimal)
                 .mapToDouble(BigDecimal::doubleValue)
                 .average();
-
+        System.out.println("--------------------------");
+        System.out.println("Задание 9");
+        System.out.println(averagePaymentForOrdersOnDate);
 
 //        Задание 10.
 //        Получите набор статистических данных (сумма, среднее, максимум, минимум, количество) для всех
@@ -116,6 +162,14 @@ public class Shop {
         BigDecimal min = productsList.stream().map(Product::getPrice).reduce(BigDecimal::min).get();
         BigDecimal max = productsList.stream().map(Product::getPrice).reduce(BigDecimal::max).get();
         int count = productsList.size();
+        System.out.println("--------------------------");
+        System.out.println("Задание 10");
+        System.out.println("sum - " + sum);
+        System.out.println("average - " + average);
+        System.out.println("min - " + min);
+        System.out.println("max - " + max);
+        System.out.println("count - " + count);
+
 
 //        Задание 11.
 //        Получите данные Map<Long, Integer> → key - id заказа, value - кол-во товаров в заказе
@@ -123,13 +177,26 @@ public class Shop {
                 .flatMap(customer -> customer.getOrders().stream())
                 .collect(
                         Collectors.groupingBy(Order::getId, Collectors.mapping(Order::getProducts, Collectors.counting())));
+        System.out.println("--------------------------");
+        System.out.println("Задание 11");
+        for (Map.Entry<Long, Long> entry : ordersAndQuantityGoods.entrySet()) {
+            System.out.println(entry.getKey() + "-" + entry.getValue());
+        }
 
 //        Задание 12.
 //        Создайте Map<Customer, List<Order>> → key - покупатель, value - список его заказов
         Map<Customer, List<Order>> customersAndOrders = customers.stream()
                 .collect(Collectors.toMap(Function.identity(),
                         customer -> customer.getOrders().stream().toList()));
-
+        System.out.println("--------------------------");
+        System.out.println("Задание 12");
+        for (Map.Entry<Customer, List<Order>> entry : customersAndOrders.entrySet()) {
+            System.out.println(entry.getKey() + ":");
+            for (Order order :
+                    entry.getValue()) {
+                System.out.println(order);
+            }
+        }
 
 //        Задание 13.
 //        Создайте Map<Order, Double> → key - заказ, value - общая сумма продуктов заказа.
@@ -137,6 +204,12 @@ public class Shop {
                 .flatMap(customer -> customer.getOrders().stream())
                 .collect(Collectors.toMap(Function.identity(),
                         Order::getSummaAsDouble));
+        System.out.println("--------------------------");
+        System.out.println("Задание 13");
+        for (Map.Entry<Order, Double> entry : ordersAndAmounts.entrySet()) {
+            System.out.println(entry.getKey() + "-" + entry.getValue());
+        }
+
 
 //        Задание 14.
 //        Получите Map<String, List<String>> → key - категория, value - список названий товаров в категории
@@ -144,6 +217,16 @@ public class Shop {
                 .flatMap(customer -> customer.getOrders().stream())
                 .flatMap(order -> order.getProducts().stream())
                 .collect(Collectors.groupingBy(Product::getCategory, Collectors.mapping(Product::toString, Collectors.toList())));
+
+        System.out.println("--------------------------");
+        System.out.println("Задание 14");
+        for (Map.Entry<String, List<String>> entry : categoriesAnsGoods.entrySet()) {
+            System.out.println(entry.getKey() + ":");
+            for (String e :
+                    entry.getValue()) {
+                System.out.println(e);
+            }
+        }
 
 //        Задание 15.
 //        Получите Map<String, Product> → самый дорогой продукт по каждой категории.
@@ -154,7 +237,11 @@ public class Shop {
                         Collectors.groupingBy(
                                 Product::getCategory,
                                 Collectors.maxBy(Comparator.comparing(Product::getPrice))));
-
+        System.out.println("--------------------------");
+        System.out.println("Задание 15");
+        for (Map.Entry<String, Optional<Product>> entry : categoriesAndExpensiveProduct.entrySet()) {
+            System.out.println(entry.getKey() + "-" + entry.getValue());
+        }
     }
 
 

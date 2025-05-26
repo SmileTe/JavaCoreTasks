@@ -1,6 +1,7 @@
 package com.homework;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class Product {
     private final Long id;
@@ -32,12 +33,12 @@ public class Product {
         return price;
     }
 
-    public boolean priceMoreThanValue(int T) {
-        return getPrice().compareTo(new BigDecimal(T)) == 1;
+    public boolean priceMoreThenValue(int T) {
+        return getPrice().compareTo(new BigDecimal(T)) >0;
     }
 
     public BigDecimal getPriceWithDiscount(int discount) {
-        return price.subtract(price.multiply(new BigDecimal(discount)).divide(new BigDecimal(100)));
+        return price.subtract(price.multiply(new BigDecimal(discount)).divide(new BigDecimal(100), RoundingMode.HALF_UP));
     }
 
     @Override

@@ -16,7 +16,7 @@ public class Shop {
         // Получите список продуктов из категории "Books" с ценой более 100.
         List<Product> listProductsBooks = customers.stream()
                 .flatMap(customer -> customer.getOrders().stream())
-                .flatMap(order -> order.getProducts().stream().filter(x -> x.getCategory().equals("Books") && x.priceMoreThanValue(100)))
+                .flatMap(order -> order.getProducts().stream().filter(x -> x.getCategory().equals("Books") && x.priceMoreThenValue(100)))
                 .distinct()
                 .toList();
         System.out.println("Задание 1");
@@ -44,14 +44,14 @@ public class Shop {
 //        Задание 3.
 //        Получите список продуктов из категории "Toys" и примените скидку 10% и получите сумму всех
 //        продуктов.
-        BigDecimal productListToysWithDiscount = customers.stream()
+        BigDecimal sumOfAllToysWithDiscount = customers.stream()
                 .flatMap(customer -> customer.getOrders().stream())
                 .flatMap(order -> order.getProducts().stream().filter(x -> x.getCategory().equals("Toys")))
                 .map(x -> x.getPriceWithDiscount(10))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         System.out.println("--------------------------");
         System.out.println("Задание 3");
-        System.out.println(productListToysWithDiscount);
+        System.out.println(sumOfAllToysWithDiscount);
 
 
 //        Задание 4.
@@ -136,13 +136,13 @@ public class Shop {
 
 //        Задание 9.
 //        Рассчитайте средний платеж по заказам, сделанным 14-марта-2021.
-        OptionalDouble averagePaymentForOrdersOnDate = customers.stream()
+        Double averagePaymentForOrdersOnDate = customers.stream()
                 .flatMap(customer -> customer.getOrders().stream())
                 .filter(x -> x.getDeliveryDate().equals(LocalDate.of(2025, 3, 14)))
 
                 .map(Order::getSummaAsBigDecimal)
                 .mapToDouble(BigDecimal::doubleValue)
-                .average();
+                .average().orElse(0.0);
         System.out.println("--------------------------");
         System.out.println("Задание 9");
         System.out.println(averagePaymentForOrdersOnDate);
@@ -159,8 +159,8 @@ public class Shop {
 
         BigDecimal sum = productsList.stream().map(Product::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal average = productsList.stream().map(Product::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add).divide(BigDecimal.valueOf(productsList.size()));
-        BigDecimal min = productsList.stream().map(Product::getPrice).reduce(BigDecimal::min).get();
-        BigDecimal max = productsList.stream().map(Product::getPrice).reduce(BigDecimal::max).get();
+        BigDecimal min = productsList.stream().map(Product::getPrice).reduce(BigDecimal::min).orElse(BigDecimal.ZERO);
+        BigDecimal max = productsList.stream().map(Product::getPrice).reduce(BigDecimal::max).orElse(BigDecimal.ZERO);
         int count = productsList.size();
         System.out.println("--------------------------");
         System.out.println("Задание 10");
@@ -173,15 +173,14 @@ public class Shop {
 
 //        Задание 11.
 //        Получите данные Map<Long, Integer> → key - id заказа, value - кол-во товаров в заказе
-        Map<Long, Long> ordersAndQuantityGoods = customers.stream()
-                .flatMap(customer -> customer.getOrders().stream())
-                .collect(
-                        Collectors.groupingBy(Order::getId, Collectors.mapping(Order::getProducts, Collectors.counting())));
         System.out.println("--------------------------");
         System.out.println("Задание 11");
-        for (Map.Entry<Long, Long> entry : ordersAndQuantityGoods.entrySet()) {
-            System.out.println(entry.getKey() + "-" + entry.getValue());
-        }
+        customers.stream()
+                .flatMap(customer -> customer.getOrders().stream())
+                .collect(
+                        Collectors.groupingBy(Order::getId, Collectors.mapping(Order::getProducts, Collectors.counting())))
+                .forEach((key, value) -> System.out.println(key + "-" + value));
+
 
 //        Задание 12.
 //        Создайте Map<Customer, List<Order>> → key - покупатель, value - список его заказов
@@ -202,6 +201,7 @@ public class Shop {
 //        Создайте Map<Order, Double> → key - заказ, value - общая сумма продуктов заказа.
         Map<Order, Double> ordersAndAmounts = customers.stream()
                 .flatMap(customer -> customer.getOrders().stream())
+                .distinct()
                 .collect(Collectors.toMap(Function.identity(),
                         Order::getSummaAsDouble));
         System.out.println("--------------------------");
@@ -216,6 +216,7 @@ public class Shop {
         Map<String, List<String>> categoriesAnsGoods = customers.stream()
                 .flatMap(customer -> customer.getOrders().stream())
                 .flatMap(order -> order.getProducts().stream())
+                .distinct()
                 .collect(Collectors.groupingBy(Product::getCategory, Collectors.mapping(Product::toString, Collectors.toList())));
 
         System.out.println("--------------------------");
@@ -230,16 +231,17 @@ public class Shop {
 
 //        Задание 15.
 //        Получите Map<String, Product> → самый дорогой продукт по каждой категории.
-        Map<String, Optional<Product>> categoriesAndExpensiveProduct = customers.stream()
+        Map<String, Product> categoriesAndExpensiveProduct = customers.stream()
                 .flatMap(customer -> customer.getOrders().stream())
                 .flatMap(order -> order.getProducts().stream())
                 .collect(
                         Collectors.groupingBy(
                                 Product::getCategory,
-                                Collectors.maxBy(Comparator.comparing(Product::getPrice))));
+                                Collectors.collectingAndThen(Collectors.maxBy(Comparator.comparing(Product::getPrice)), Optional::orElseThrow)));
+
         System.out.println("--------------------------");
         System.out.println("Задание 15");
-        for (Map.Entry<String, Optional<Product>> entry : categoriesAndExpensiveProduct.entrySet()) {
+        for (Map.Entry<String, Product> entry : categoriesAndExpensiveProduct.entrySet()) {
             System.out.println(entry.getKey() + "-" + entry.getValue());
         }
     }

@@ -1,10 +1,10 @@
 package com.homework;
 
 public class Order {
-    int id;
-    String productName;
-    int quantity;
-    double unitPrice;
+    private int id;
+    private String productName;
+    private int quantity;
+    private double unitPrice;
 
     public Order(int id, String productName, int quantity, double unitPrice) {
         this.id = id;

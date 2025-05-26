@@ -10,8 +10,10 @@ import java.util.NoSuchElementException;
 import static junit.framework.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
+import java.util.Optional;
 
-public class OrderServiceTest {
+
+class OrderServiceTest {
 
     OrderService orderService;
 
@@ -56,8 +58,9 @@ public class OrderServiceTest {
     void calculateTotalWithSuccess() {
 
         Order order = new Order(1, "test", 3, 100);
+        Optional<Order> optOrder = Optional.of(order);
 
-        Mockito.when(orderRepositoryMock.getOrderById(1)).thenReturn(order);
+        Mockito.when(orderRepositoryMock.getOrderById(1)).thenReturn(optOrder);
 
         double total = orderService.calculateTotal(1);
 
@@ -71,7 +74,7 @@ public class OrderServiceTest {
 
         Order order = new Order(1, "test", 3, 100);
 
-        Mockito.when(orderRepositoryMock.getOrderById(1)).thenReturn(null);
+        Mockito.when(orderRepositoryMock.getOrderById(1)).thenReturn(Optional.empty());
 
         Assertions.assertThrows(NoSuchElementException.class, () -> orderService.calculateTotal(1));
         Mockito.verify(orderRepositoryMock, times(1)).getOrderById(1);
@@ -82,8 +85,8 @@ public class OrderServiceTest {
     void calculateTotalWithZeroQuantityAndPrice() {
 
         Order order = new Order(1, "test", 0, 0);
-
-        Mockito.when(orderRepositoryMock.getOrderById(1)).thenReturn(order);
+        Optional<Order> optOrder = Optional.of(order);
+        Mockito.when(orderRepositoryMock.getOrderById(1)).thenReturn(optOrder);
 
         double total = orderService.calculateTotal(1);
 
